@@ -1,0 +1,60 @@
+version: '3'
+services:
+    #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pos
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html/
+    volumes:
+      - ./:/var/www/html/
+    networks:
+      - app-network
+ 
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: posserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+ 
+  #MySQL Service
+  db:
+    image: mysql:5.7.32
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    volumes:
+     - "$PWD/mysql:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: pos
+      MYSQL_ROOT_PASSWORD: 12345
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app-network
+ 
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local
