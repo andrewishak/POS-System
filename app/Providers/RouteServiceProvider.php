@@ -7,9 +7,11 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use LaravelLocalization;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    use \Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
     /**
      * The path to the "home" route for your application.
      *
@@ -29,16 +31,17 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
+            Route::prefix(LaravelLocalization::setLocale())
                 ->middleware('api')
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
+                ->prefix(LaravelLocalization::setLocale())
                 ->group(base_path('routes/web.php'));
 
-            Route::prefix('dashboard')
-            ->name('dashboard.')
-                ->middleware('web')
+            Route::prefix(LaravelLocalization::setLocale())
+                ->name('dashboard.')
+                ->middleware(['web','localeSessionRedirect', 'localizationRedirect', 'localeViewPath'])
                 ->group(base_path('routes/dashboard/web.php'));
         });
     }

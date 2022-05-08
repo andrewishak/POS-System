@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.app');
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/', function () {
+        return view('dashboard.app');
+    });
 });

@@ -16,7 +16,6 @@ services:
       - ./:/var/www/html/
     networks:
       - app-network
- 
   #Nginx Service
   webserver:
     image: nginx:alpine
@@ -31,7 +30,6 @@ services:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
       - app-network
- 
   #MySQL Service
   db:
     image: mysql:5.7.32

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" >
 <head>
   @include('dashboard.includes.header')
 </head>
@@ -43,10 +43,19 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    <strong>Andrew Ishaq Ibrahim</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
+      <ul>
+        @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+            <li>
+                <a rel="alternate" hreflang="{{ $localeCode }}"
+                    href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                    {{ $properties['native'] }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
     </div>
   </footer>
 
